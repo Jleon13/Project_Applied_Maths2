@@ -76,6 +76,7 @@ with no-slip $\mathbf{u}=\mathbf{0}$ on $\Gamma_w\cup\Gamma_{fs}$.
 On inlet/outlet windows you can use **do-nothing** tractions or prescribe profiles.
 
 **Fluid temperature (advection–diffusion) in $\Omega_f$**
+
 $$
 \partial_t T_f - \hat\kappa \Delta T_f + \mathbf{u}\cdot\nabla T_f = 0
 \quad \text{in } \Omega_f\times(0,T).
@@ -83,6 +84,7 @@ $$
 
 **Coupling and BCs**
 - Interface (Robin–Robin) on $\Gamma_{fs}$:
+- 
 $$
 \partial_{\mathbf{n}}T_s = \alpha (T_f - T_s), 
 \qquad
@@ -97,6 +99,7 @@ $$
 ## 4) Weak Formulation (Variational)
 
 Spaces:
+
 $$
 \begin{aligned}
 V &:= \{\mathbf{v}\in H^1(\Omega_f)^d:\ \mathbf{v}=\mathbf{0}\ \text{on }\Gamma_w\cup\Gamma_{fs}\},\\
@@ -109,6 +112,7 @@ $$
 Con $D\mathbf{u}=\tfrac12(\nabla\mathbf{u}+\nabla\mathbf{u}^\top)$ y tests $\mathbf{v}\in V$, $q\in Q$, $\phi_s\in W_s$, $\phi_f\in W_f$:
 
 **Solid heat**
+
 $$
 \int_{\Omega_s}\partial_t T_s\,\phi_s
 +\kappa\int_{\Omega_s}\nabla T_s\cdot\nabla\phi_s
@@ -117,6 +121,7 @@ $$
 $$
 
 **Fluid temperature**
+
 $$
 \int_{\Omega_f}\partial_t T_f\,\phi_f
 +\int_{\Omega_f}(\mathbf{u}\cdot\nabla T_f)\,\phi_f
@@ -126,6 +131,7 @@ $$
 $$
 
 **Navier–Stokes**
+
 $$
 \begin{aligned}
 &\rho\int_{\Omega_f}\partial_t\mathbf{u}\cdot\mathbf{v}
@@ -138,4 +144,5 @@ $$
 $$
 
 This matches the LaTeX derivation included in the project.
+
 
