@@ -92,7 +92,7 @@ $$
 $$
 - Walls $\Gamma_w$: $\mathbf{u}=\mathbf{0}$, $\partial_{\mathbf{n}}T_f=0$.
 - Inlet/Outlet tabs: optional temperature Dirichlet $T_f=T_{\text{in/out}}$ or natural.
-- Initial data: $ \mathbf{u}(x,0)=\mathbf{u}_0(x)$, $T_f(x,0)=T_{f,0}(x)$, $T_s(x,0)=T_{s,0}(x)$.
+- Initial data:  $\mathbf{u}(x,0)=\mathbf{u}_0(x)$, $T_f(x,0)=T_{f,0}(x)$, $T_s(x,0)=T_{s,0}(x)$.
 
 ---
 
@@ -144,5 +144,6 @@ $$
 $$
 
 This matches the LaTeX derivation included in the project.
+
 
 
