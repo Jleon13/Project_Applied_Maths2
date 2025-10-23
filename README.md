@@ -1,7 +1,35 @@
 # Conjugate Heat Transfer (CHT) — Plate with Hollow Border and Channel Flow
 
-![Geometry overview](docs/cht-geometry.png)
+\begin{tikzpicture}[line cap=round, line join=round, >=latex]
+  \def\xL{-5} \def\xR{5}
+  \def\yB{-3} \def\yT{3}
+  \def\xs{-3} \def\xe{3}
+  \def\ys{-2} \def\ye{2}
+  \def\yin{1.8}  \def\win{0.8}
 
+  \draw[very thick] (\xL,\yB) rectangle (\xR,\yT);
+  \draw[very thick] (\xs,\ys) rectangle (\xe,\ye);
+
+  \node at (0,0) {$\Omega_s$};
+  \node at (0,-2.6) {$\Omega_f$};
+
+  \draw[line width=3pt,red] (\xL,\yin) -- (\xL,{\yin+\win});
+  \draw[line width=3pt,red] (\xL,{-\yin-\win}) -- (\xL,{-\yin});
+  \draw[line width=3pt,red] (\xR,\yin) -- (\xR,{\yin+\win});
+  \draw[line width=3pt,red] (\xR,{-\yin-\win}) -- (\xR,{-\yin});
+
+  \node[anchor=east] at (\xL,{\yin+0.4}) {$\Gamma_{\text{in}}^{(1)}$};
+  \node[anchor=east] at (\xL,{-\yin-0.4}) {$\Gamma_{\text{in}}^{(2)}$};
+  \node[anchor=west] at (\xR,{\yin+0.4}) {$\Gamma_{\text{out}}^{(1)}$};
+  \node[anchor=west] at (\xR,{-\yin-0.4}) {$\Gamma_{\text{out}}^{(2)}$};
+
+  \node at (0,3.3) {$\Gamma_w$};
+  \node at (0,-3.3) {$\Gamma_w$};
+
+  \node at (3.4,0) {$\Gamma_{fs}$};
+  \node at (-3.4,0) {$\Gamma_{fs}$};
+\end{tikzpicture}%
+}
 > **TL;DR**  
 > 2D **conjugate heat transfer** (CHT) setup: an outer channel with two inlet/outlet “tabs” on each vertical wall and a centered **solid plate** (inner square).  
 > This repo includes:
@@ -144,6 +172,7 @@ $$
 $$
 
 This matches the LaTeX derivation included in the project.
+
 
 
 
