@@ -1,5 +1,6 @@
 *.deb
 *.zip
+*.rpm
 
 /freefem/
 /freefem-intro-main/
