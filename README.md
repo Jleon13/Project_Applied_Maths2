@@ -62,6 +62,7 @@ $$
 $$
 
 **Fluid (incompressible Navier–Stokes) in $\Omega_f$**
+
 $$
 \begin{aligned}
 \rho(\partial_t \mathbf{u} + \mathbf{u}\cdot\nabla \mathbf{u})
@@ -137,3 +138,4 @@ $$
 $$
 
 This matches the LaTeX derivation included in the project.
+
