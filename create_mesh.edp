@@ -1,0 +1,143 @@
+/*
+
+// ----- First Mesh two squares-----
+
+
+int upper = 1;
+int others = 2;
+int inner  = 3;
+
+border C01(t = 0, 1){ x = 0;            y = -1 + t;      label = upper; }
+border C02(t = 0, 1){ x = 1.5 - 1.5*t;  y = -1;          label = upper; }
+border C03(t = 0, 1){ x = 1.5;          y = -t;          label = upper; }
+border C04(t = 0, 1){ x = 1   + 0.5*t;  y = 0;           label = others; }
+border C05(t = 0, 1){ x = 0.5 + 0.5*t;  y = 0;           label = others; }
+border C06(t = 0, 1){ x = 0.5*t;        y = 0;           label = others; }
+
+// ----- cuadrado interior centrado -----
+// vértices: (0.1,-0.1) — (1.3,-0.1) — (1.3,-0.9) — (0.1,-0.9)
+
+border C11(t = 0, 1){ x = 0.1;          y = -0.1 - 0.8*t; label = inner; } // izq (arriba→abajo)
+border C12(t = 0, 1){ x = 0.1 + 1.3*t;  y = -0.9;         label = inner; } // abajo   (0.1→1.4)
+border C13(t = 0, 1){ x = 1.4;          y = -0.9 + 0.8*t; label = inner; } // dcha    (abajo→arriba)
+border C14(t = 0, 1){ x = 1.4 - 1.3*t;  y = -0.1;         label = inner; } // arriba  (1.4→0.1)
+
+int n = 10;
+
+plot(C01(-n) + C02(-n) + C03(-n) + C04(-n) + C05(-n) + C06(-n)
+   + C11(n) + C12(n) + C13(n) + C14(n), wait = true);
+
+mesh Th = buildmesh(C01(-n) + C02(-n) + C03(-n) + C04(-n) + C05(-n)
+   + C06(-n) + C11(n) + C12(n) + C13(n) + C14(n));
+
+plot(Th, wait = true);
+
+cout << "Part 1 has region number " << Th(0.75, -0.9).region << endl;
+cout << "Part 2 has region number " << Th(0.75, -0.5).region << endl;
+
+savemesh(Th, "malla_total.mesh");
+*/
+
+
+
+// ======================================================================
+// Box with two tabs each side + inner square hole
+// + matching inner solid mesh (same Gamma_fs nodes)
+// ASCII only
+// ======================================================================
+
+verbosity = 1;
+
+// ---------- Main geometry ----------
+real xL = 0.0, xR = 1.5, yB = -1.0, yT = 0.0;  // outer box
+
+// inner square (hole), centered with equal margins in X and at y∈[-0.9,-0.1]
+real mLeft = 0.10, mRight = 0.10;
+real xs = xL + mLeft;      // 0.10
+real xe = xR - mRight;     // 1.40
+real ys = -0.90, ye = -0.10;
+
+// tabs geometry (two windows per side)
+real wTab = 0.30;                  // tab width to the outside
+real xLo = xL - wTab;              // left outer x
+real xRo = xR + wTab;              // right outer x
+// vertical bands for tabs (lower and upper)
+real yA0 = -0.85, yA1 = -0.65;     // lower band [yA0,yA1]
+real yB0 = -0.35, yB1 = -0.15;     // upper band [yB0,yB1]
+
+// ---------- Labels ----------
+int labWall = 30, labIFS = 40;
+
+// ---------- OUTER BOUNDARY (CCW) ----------
+// bottom: left -> right
+border B0 (t = xL, xR){ x = t;  y = yB; label = labWall; }
+
+// right wall going up with two right tabs
+border R0  (t = yB,  yA0){ x = xR; y = t;  label = labWall; }
+border RTb (t = xR,  xRo){ x = t;  y = yA0; label = labWall; } // bottom of lower right tab
+border RTv (t = yA0, yA1){ x = xRo; y = t;  label = labWall; } // outer vertical
+border RTt (t = xRo, xR ){ x = t;  y = yA1; label = labWall; } // top back to wall
+border R1  (t = yA1, yB0){ x = xR; y = t;  label = labWall; }
+border RUb (t = xR,  xRo){ x = t;  y = yB0; label = labWall; } // bottom of upper right tab
+border RUv (t = yB0, yB1){ x = xRo; y = t;  label = labWall; }
+border RUt (t = xRo, xR ){ x = t;  y = yB1; label = labWall; }
+border R2  (t = yB1, yT ){ x = xR; y = t;  label = labWall; }
+
+// top: right -> left
+border T0 (t = xR, xL){ x = t;  y = yT; label = labWall; }
+
+// left wall going down with two left tabs
+border L0  (t = yT,  yB1){ x = xL; y = t;  label = labWall; }
+border LUt (t = xL,  xLo){ x = t;  y = yB1; label = labWall; } // top of upper left tab
+border LUv (t = yB1, yB0){ x = xLo; y = t;  label = labWall; } // outer vertical
+border LUb (t = xLo, xL ){ x = t;  y = yB0; label = labWall; } // bottom back to wall
+border L1  (t = yB0, yA1){ x = xL; y = t;  label = labWall; }
+border LLt (t = xL,  xLo){ x = t;  y = yA1; label = labWall; } // top of lower left tab
+border LLv (t = yA1, yA0){ x = xLo; y = t;  label = labWall; }
+border LLb (t = xLo, xL ){ x = t;  y = yA0; label = labWall; }
+border L2  (t = yA0, yB ){ x = xL; y = t;  label = labWall; }
+
+// ---------- INNER SQUARE (HOLE) CW ----------
+border I1 (t = xe, xs){ x = t;  y = ys; label = labIFS; } // bottom (right->left)
+border I2 (t = ys, ye){ x = xs; y = t;  label = labIFS; } // left   (down->up)
+border I3 (t = xs, xe){ x = t;  y = ye; label = labIFS; } // top    (left->right)
+border I4 (t = ye, ys){ x = xe; y = t;  label = labIFS; } // right  (up->down)
+
+// ---------- Discretization ----------
+int nWall = 16;       // typical along vertical walls
+int nTop  = 24;       // a bit finer along top/bottom
+int nHole = 22;       // !!! used also for inner solid to match nodes
+
+// ---------- Build outer fluid mesh (with inner hole) ----------
+mesh Th = buildmesh(
+    B0(nTop)
+  + R0(nWall) + RTb(8) + RTv(8) + RTt(8) + R1(nWall)
+  + RUb(8) + RUv(8) + RUt(8) + R2(nWall)
+  + T0(nTop)
+  + L0(nWall) + LUt(8) + LUv(8) + LUb(8) + L1(nWall)
+  + LLt(8) + LLv(8) + LLb(8) + L2(nWall)
+  + I1(nHole) + I2(nHole) + I3(nHole) + I4(nHole)
+);
+
+plot(Th, wait = 0, cmm = "Box with two tabs each side + inner hole", fill = false);
+savemesh(Th, "malla_superior.mesh");
+
+// ======================================================================
+//                       Inner solid (plate) mesh
+//   Same interface discretization => identical nodes on Gamma_fs (label=40)
+// ======================================================================
+border SJ1(t = xs, xe){ x = t;  y = ys; label = labIFS; } // bottom: left->right
+border SJ2(t = ys, ye){ x = xe; y = t;  label = labIFS; } // right:  down->up
+border SJ3(t = xe, xs){ x = t;  y = ye; label = labIFS; } // top:    right->left
+border SJ4(t = ye, ys){ x = xs; y = t;  label = labIFS; } // left:   up->down
+
+mesh Thin = buildmesh( SJ1(nHole) + SJ2(nHole) + SJ3(nHole) + SJ4(nHole) );
+
+plot(Thin, wait = 1,add=true, cmm = "Inner plate mesh (Gamma_fs = 40, matched nodes)");
+savemesh(Thin, "malla_inferior.mesh");
+
+// unir y graficar en una sola figura
+mesh ThAll = Th + Thin;
+plot(ThAll, wait=1);
+
+savemesh(ThAll, "malla_total.mesh");
